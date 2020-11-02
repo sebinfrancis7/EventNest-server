@@ -6,7 +6,6 @@ const passport = require('passport');
 const Customers = require('../models/customer');
 const Events = require('../models/events');
 
-//**** to do check authentication, needs testing with facebook
 const { isAuth } = require('./authMiddleware');
 const events = require('../models/events');
 
@@ -143,5 +142,33 @@ customerRouter
             })
             .catch((err) => next(err));
     })
+
+customerRouter
+    .route('/:customerId/wishlist/:event_id')
+    .post((req, res, next) => {
+        Customers.findByIdAndUpdate(req.params.customerId, { $addToSet: { wishlist: req.params.event_id } })
+            .then(
+                (resp) => {
+                    res.statusCode = 200;
+                    res.setHeader('Content-Type', 'application/json');
+                    res.json(resp);
+                },
+                (err) => next(err)
+            )
+            .catch((err) => next(err));
+    })
+    .delete((req, res, next) => {
+        Customers.findByIdAndUpdate(req.params.customerId, { $pull: { wishlist: req.params.event_id } })
+            .then(
+                (resp) => {
+                    res.statusCode = 200;
+                    res.setHeader('Content-Type', 'application/json');
+                    res.json(resp);
+                },
+                (err) => next(err)
+            )
+            .catch((err) => next(err));
+    });
+
 
 module.exports = customerRouter;
