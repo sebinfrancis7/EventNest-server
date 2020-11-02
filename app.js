@@ -37,6 +37,21 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+
+//auth for facebook
+app.get('/auth/facebook',
+    passport.authenticate('facebook'));
+// sharing will require app review from facebook
+// passport.authenticate('facebook', { authType: 'reauthenticate', scope: ['manage_pages', publish_video] }));  // to share on facebook
+
+app.get('/auth/facebook/callback',
+    passport.authenticate('facebook', { failureRedirect: '/customers/login' }),
+    function(req, res) {
+        // Successful authentication, redirect home.
+        res.redirect('/');
+    });
+
+//routers setup     
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 

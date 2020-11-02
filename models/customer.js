@@ -1,22 +1,33 @@
 const mongoose = require('mongoose');
+const passportLocalMongoose = require('passport-local-mongoose');
 
 const Schema = mongoose.Schema;
 
-const costomerSchema = new Schema({
-    profile: {
-        imageUrl: String,
-        name: {
-            type: String,
-            required: true,
-            trim: true,
-        },
+const customerSchema = new Schema({
+    imageUrl: String,
+    display_name: {
+        type: String,
+        trim: true,
     },
-    tags: {
-        type
-    }
-    //facebook auth?? 
+    email: String,
+    purcahses: [{
+        event: {
+            type: Schema.Types.ObjectId,
+            ref: 'events',
+        },
+        tickets: Number,
+    }],
+    wishlist: [{
+        type: Schema.Types.ObjectId,
+        ref: 'events',
+    }],
+    facebookId: [{
+        type: String,
+    }]
 }, { timestamps = true });
 
-const Customers = mongoose.model('Customer', costomerSchema);
+User.customerSchema(passportLocalMongoose);
+
+const Customers = mongoose.model('Customer', customerSchema);
 
 module.exports = Customers;

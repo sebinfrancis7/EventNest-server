@@ -14,16 +14,31 @@ const costomerSchema = new Schema({
         ref: 'organizer',
         required: true
     },
-    tags: [{
-        // obejct id??
+    title: {
         type: String,
-    }],
+    },
+    category: {
+        type: String,
+    },
+    city: {
+        type: String,
+    },
+    venue_addr: {
+        type: String,
+    },
     image_url: {
         type: String,
+    },
+    price: {
+        type: Number,
     },
     description: {
         type: String,
     },
+    attendees: {
+        type: Number,
+        default: 0,
+    }
 }, { timestamps = true });
 
 const Customers = mongoose.model('Customer', costomerSchema);
