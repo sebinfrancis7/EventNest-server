@@ -1,20 +1,14 @@
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const passportLocalMongoose = require('passport-local-mongoose');
 
-
 const organizerSchema = new Schema({
-    profile: {
-        imageUrl: String,
-        name: {
-            type: String,
-            required: true,
-            trim: true,
-        },
-        events: [{
-            type: Schema.Types.ObjectId,
-            ref: 'events',
-        }],
-    },
+    imageUrl: String,
+    events: [{
+        type: Schema.Types.ObjectId,
+        ref: 'events',
+    }],
+    email: String,
     // more details
 });
 

@@ -1,12 +1,14 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const passport = require('passport');
 
 const Customers = require('../models/customer');
 const Events = require('../models/events');
 
 //**** to do check authentication, needs testing with facebook
 const { isAuth } = require('./authMiddleware');
+const events = require('../models/events');
 
 const customerRouter = express.Router();
 
@@ -36,7 +38,7 @@ customerRouter
                     res.setHeader('Content-Type', 'application/json');
                     res.json({ err: err });
                 } else {
-                    passport.authenticate('local')(req, res, () => {
+                    passport.authenticate('cust-local')(req, res, () => {
                         res.statusCode = 200;
                         res.setHeader('Content-Type', 'application/json');
                         res.json({
@@ -53,23 +55,21 @@ customerRouter
         res.end('PUT operation not supported on /customers');
     })
     .delete((req, res, next) => {
-        // Customers.deleteMany({})
-        //     .then(
-        //         (resp) => {
-        //             res.statusCode = 200;
-        //             res.setHeader('Content-Type', 'application/json');
-        //             res.json(resp);
-        //         },
-        //         (err) => next(err)
-        //     )
-        //     .catch((err) => next(err));
-        res.statusCode = 403;
-        res.end('Dangerous operation, not supported');
+        Customers.deleteMany({})
+            .then(
+                (resp) => {
+                    res.statusCode = 200;
+                    res.setHeader('Content-Type', 'application/json');
+                    res.json(resp);
+                },
+                (err) => next(err)
+            )
+            .catch((err) => next(err));
     });
 
 customerRouter
     .route('/login')
-    .post(passport.authenticate('local'), (req, res) => {
+    .post(passport.authenticate('cust-local'), (req, res) => {
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
         res.json({ success: true, status: 'You are successfully logged in!' });
@@ -126,18 +126,21 @@ customerRouter
 
 //idk probably won't work
 customerRouter
-    .route('/:customerId/purchase/:eventId')
+    .route('/:customerId/purchase')
     .post((req, res, next) => {
-        Customers.findById(customerId)
-            .then((customer) => {
-                customer.purchases.push(req.body)
-                customer.save()
+        Customers.findByIdAndUpdate(req.params.customerId, { $push: { purcahses: req.body } })
+            .then(cust => {
+                Events.findById(req.body.event)
+                    .then(events => {
+                        events.attendees = events.attendees + req.body.tickets;
+                        events.save();
+                    })
+                    .then(resp => {
+                        res.statusCode = 200;
+                        res.setHeader('Content-Type', 'application/json');
+                        res.json({ 'successful': true });
+                    })
             })
-            .then(Events.findById(eventId)
-                .then(events => {
-                    events.attendees = events.attendees + req.body.tickets;
-                    events.save();
-                }))
             .catch((err) => next(err));
     })
 

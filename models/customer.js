@@ -24,9 +24,9 @@ const customerSchema = new Schema({
     facebookId: [{
         type: String,
     }]
-}, { timestamps = true });
+}, { timestamps: true });
 
-User.customerSchema(passportLocalMongoose);
+customerSchema.plugin(passportLocalMongoose);
 
 const Customers = mongoose.model('Customer', customerSchema);
 

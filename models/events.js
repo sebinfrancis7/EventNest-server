@@ -6,9 +6,11 @@
 
 const mongoose = require('mongoose');
 
+const Organizer = require('./organizer');
+
 const Schema = mongoose.Schema;
 
-const costomerSchema = new Schema({
+const eventSchema = new Schema({
     organizer: {
         type: Schema.Types.ObjectId,
         ref: 'organizer',
@@ -42,8 +44,16 @@ const costomerSchema = new Schema({
         type: Number,
         default: 0,
     }
-}, { timestamps = true });
+}, { timestamps: true });
 
-const Customers = mongoose.model('Customer', costomerSchema);
+eventSchema.post('save', function(next) {
+    var event = this;
+    event.model('Organizer')
+        .findByIdAndUpdate(event.organizer, { $push: { events: event._id } })
+        .then(next)
+        .catch(err => next(err))
+})
 
-module.exports = Customers;
+const events = mongoose.model('event', eventSchema);
+
+module.exports = events;
