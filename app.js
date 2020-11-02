@@ -7,9 +7,14 @@ var logger = require('morgan');
 
 //introduced dependencies
 var mongoose = require('mongoosee');
+var passport = require('passport')
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+
+var customerRouter = require('./routes/customer');
+var organizerRouter = require('./routes/organizer');
+var eventsRouter = require('./routes/events');
 
 var app = express();
 
@@ -54,6 +59,9 @@ app.get('/auth/facebook/callback',
 //routers setup     
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/customer', customerRouter);
+app.use('/organizer', organizerRouter);
+app.use('/events', eventsRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
