@@ -35,6 +35,9 @@ const costomerSchema = new Schema({
     description: {
         type: String,
     },
+    facebook_page: {
+        type: String,
+    },
     attendees: {
         type: Number,
         default: 0,
