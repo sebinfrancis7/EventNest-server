@@ -43,6 +43,10 @@ const eventSchema = new Schema({
     attendees: {
         type: Number,
         default: 0,
+    },
+    max_attendees: {
+        type: Number,
+        default: 0,
     }
 }, { timestamps: true });
 
