@@ -37,14 +37,19 @@ customerRouter
                     res.setHeader('Content-Type', 'application/json');
                     res.json({ err: err });
                 } else {
-                    passport.authenticate('cust-local')(req, res, () => {
-                        res.statusCode = 200;
-                        res.setHeader('Content-Type', 'application/json');
-                        res.json({
-                            success: true,
-                            status: 'Registration Successful!',
-                        });
-                    });
+                    if (req.body.email) user.email = req.body.email;
+                    if (req.body.display_name) user.display_name = req.body.display_name;
+                    user.save()
+                        .then(() => {
+                            passport.authenticate('cust-local')(req, res, () => {
+                                res.statusCode = 200;
+                                res.setHeader('Content-Type', 'application/json');
+                                res.json({
+                                    success: true,
+                                    user_id: user._id
+                                });
+                            });
+                        }, err => next(err));
                 }
             }
         );
@@ -123,23 +128,27 @@ customerRouter
             .catch((err) => next(err));
     });
 
-//idk probably won't work
+
 customerRouter
     .route('/:customerId/purchase')
     .post((req, res, next) => {
         Customers.findByIdAndUpdate(req.params.customerId, { $push: { purcahses: req.body } })
             .then(cust => {
-                Events.findById(req.body.event)
-                    .then(events => {
-                        events.attendees = events.attendees + req.body.tickets;
-                        events.save();
-                    })
-                    .then(resp => {
-                        res.statusCode = 200;
-                        res.setHeader('Content-Type', 'application/json');
-                        res.json({ 'successful': true });
-                    })
-            })
+                    Events.findById(req.body.event)
+                        .then(events => {
+                                events.attendees = events.attendees + req.body.tickets;
+                                events.save();
+                            },
+                            (err) => next(err))
+                        .then(resp => {
+                                res.statusCode = 200;
+                                res.setHeader('Content-Type', 'application/json');
+                                res.json({ 'successful': true });
+                            },
+                            (err) => next(err))
+                        .catch((err) => next(err));
+                },
+                (err) => next(err))
             .catch((err) => next(err));
     })
 

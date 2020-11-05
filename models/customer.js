@@ -21,9 +21,9 @@ const customerSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'events',
     }],
-    facebookId: [{
+    facebookId: {
         type: String,
-    }]
+    }
 }, { timestamps: true });
 
 customerSchema.plugin(passportLocalMongoose);

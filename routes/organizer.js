@@ -42,7 +42,7 @@ organizerRouter
                         res.setHeader('Content-Type', 'application/json');
                         res.json({
                             success: true,
-                            status: 'Registration Successful!',
+                            user_id: user._id
                         });
                     });
                 }

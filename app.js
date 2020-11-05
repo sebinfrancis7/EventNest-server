@@ -7,6 +7,7 @@ var logger = require('morgan');
 
 //introduced dependencies
 var mongoose = require('mongoose');
+var cors = require('cors');
 var passport = require('passport');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
@@ -18,9 +19,11 @@ var usersRouter = require('./routes/users');
 var customerRouter = require('./routes/customer');
 var organizerRouter = require('./routes/organizer');
 var eventsRouter = require('./routes/events');
+var authRouter = require('./routes/auth');
 
 var app = express();
 
+app.use(cors());
 // Add headers
 app.use(function(req, res, next) {
 
@@ -40,6 +43,7 @@ app.use(function(req, res, next) {
     // Pass to next layer of middleware
     next();
 });
+
 
 //mongoose connection
 mongoose.set('useUnifiedTopology', true);
@@ -95,15 +99,17 @@ app.get('/auth/facebook',
 // passport.authenticate('facebook', { authType: 'reauthenticate', scope: ['manage_pages', publish_video] }));  // to share on facebook
 
 app.get('/auth/facebook/callback',
-    passport.authenticate('cust-face', { failureRedirect: '/customers/login' }),
+    passport.authenticate('cust-face', { failureRedirect: 'http://localhost:3000/signin' }),
     function(req, res) {
         // Successful authentication, redirect home.
-        res.redirect('/');
+        console.log('here');
+        res.redirect('http://localhost:3000/');
     });
 
 //routers setup     
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/auth', authRouter);
 app.use('/customer', customerRouter);
 app.use('/organizer', organizerRouter);
 app.use('/events', eventsRouter);
