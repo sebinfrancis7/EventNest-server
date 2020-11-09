@@ -20,6 +20,7 @@ var customerRouter = require('./routes/customer');
 var organizerRouter = require('./routes/organizer');
 var eventsRouter = require('./routes/events');
 var authRouter = require('./routes/auth');
+var payRouter = require('./routes/razorpay');
 
 var app = express();
 
@@ -117,6 +118,7 @@ app.use('/auth', authRouter);
 app.use('/customer', customerRouter);
 app.use('/organizer', organizerRouter);
 app.use('/events', eventsRouter);
+app.use('/razorpay', payRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

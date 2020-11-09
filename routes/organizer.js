@@ -97,10 +97,10 @@ organizerRouter
     })
     .put((req, res, next) => {
         Organizers.findByIdAndUpdate(
-                req.params.organizerId, {
-                    $set: req.body,
-                }
-            )
+            req.params.organizerId, {
+                $set: req.body,
+            }
+        )
             .then(
                 (organizer) => {
                     res.statusCode = 200;
