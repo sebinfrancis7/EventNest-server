@@ -18,6 +18,7 @@ const eventSchema = new Schema({
     },
     title: {
         type: String,
+        index: true,
     },
     category: {
         type: String,
@@ -57,6 +58,7 @@ eventSchema.post('save', function(next) {
         .then(next)
         .catch(err => next(err))
 })
+
 
 const events = mongoose.model('event', eventSchema);
 

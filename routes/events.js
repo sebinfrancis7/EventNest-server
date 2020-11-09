@@ -49,6 +49,43 @@ eventRouter
 
     });
 
+// eventRouter
+//     .route('/search/:searchString')
+//     .get((req, res, next) => {
+//         Events.find({
+//                 $or: [{ $text: { $search: req.params.searchString } },
+//                     { title: { $regex: '^' + req.params.searchString, $options: "i" } }
+//                 ]
+//             })
+//             .limit(10)
+//             .then(
+//                 (event) => {
+//                     res.statusCode = 200;
+//                     res.setHeader('Content-Type', 'application/json');
+//                     res.json(event);
+//                 },
+//                 (err) => next(err)
+//             )
+//             .catch((err) => next(err));
+//     })
+
+
+eventRouter
+    .route('/search/:searchString')
+    .get(async(req, res, next) => {
+        try {
+            const titles = Events.find({ title: { $regex: '^' + req.params.searchString, $options: "i" } }).limit(10);
+            const cityTitle = Events.find({ city: { $regex: '^' + req.params.searchString, $options: "i" } }).limit(10);
+            const catgTitle = Events.find({ category: { $regex: '^' + req.params.searchString, $options: "i" } }).limit(10);
+            const result = await Promise.all([titles, cityTitle, catgTitle])
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'application/json');
+            res.json(result);
+        } catch (err) {
+            next(err)
+        }
+    })
+
 eventRouter
     .route('/:eventId')
     .get((req, res, next) => {
@@ -97,5 +134,7 @@ eventRouter
             )
             .catch((err) => next(err));
     });
+
+
 
 module.exports = eventRouter;
