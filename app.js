@@ -23,7 +23,7 @@ var authRouter = require('./routes/auth');
 
 var app = express();
 
-app.use(cors());
+// app.use(cors());
 // Add headers
 app.use(function(req, res, next) {
 
