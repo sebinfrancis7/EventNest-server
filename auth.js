@@ -10,7 +10,7 @@ passport.use('org-local', new LocalStrategy(Organizer.authenticate()));
 passport.use('cust-face', new FacebookStrategy({
         clientID: '355231605550625',
         clientSecret: 'cc3e6558d08e0d4d5a0f03959b41a3f7',
-        callbackURL: "http://localhost:4000/auth/facebook/callback",
+        callbackURL: "https://eventnest-server.herokuapp.com/auth/facebook/callback",
         profileFields: ['id', 'displayName', 'photos', 'email'],
     },
     function(accessToken, refreshToken, profile, done) {
