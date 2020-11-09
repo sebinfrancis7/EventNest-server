@@ -91,8 +91,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-
-//auth for facebook
+app.get('/logout', (req, res, next) => {
+        req.logout();
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'application/json');
+        res.json({ success: true, status: 'logout successful' });
+    })
+    //auth for facebook
 app.get('/auth/facebook',
     passport.authenticate('cust-face'));
 // sharing will require app review from facebook
@@ -102,7 +107,6 @@ app.get('/auth/facebook/callback',
     passport.authenticate('cust-face', { failureRedirect: 'http://localhost:3000/signin' }),
     function(req, res) {
         // Successful authentication, redirect home.
-        console.log('here');
         res.redirect('http://localhost:3000/');
     });
 

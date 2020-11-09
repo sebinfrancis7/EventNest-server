@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 
 const Customers = require('../models/customer');
+const Organizers = require('../models/organizer');
 const Events = require('../models/events');
 
 const { isAuth } = require('./authMiddleware');
@@ -15,9 +16,15 @@ authRouter.use(bodyParser.json());
 authRouter
     .route('/')
     .get(isAuth, (req, res, next) => {
+        let userPrototype = Object.getPrototypeOf(req.user);
+        if (userPrototype === Customers.prototype) {
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'application/json');
+            res.json({ success: true, user: req.user, type: 'customer' });
+        }
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
-        res.json({ success: true, user_id: req.user });
+        res.json({ success: true, user: req.user, type: 'organizer' });
     });
 
 // //auth for facebook
