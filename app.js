@@ -45,6 +45,15 @@ app.use(function(req, res, next) {
     next();
 });
 
+
+const corsOptions = {
+    origin: 'http://localhost:3000',
+    optionsSuccessStatus: 200,
+    credentials: true
+};
+
+app.use(cors(corsOptions));
+
 // heroku cookies bugd
 app.set('trust proxy', 1);
 //mongoose connection
@@ -95,12 +104,12 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/logout', (req, res, next) => {
-        req.logout();
-        res.statusCode = 200;
-        res.setHeader('Content-Type', 'application/json');
-        res.json({ success: true, status: 'logout successful' });
-    })
-    //auth for facebook
+    req.logout();
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'application/json');
+    res.json({ success: true, status: 'logout successful' });
+});
+//auth for facebook
 app.get('/auth/facebook',
     passport.authenticate('cust-face'));
 // sharing will require app review from facebook
