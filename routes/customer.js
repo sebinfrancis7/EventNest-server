@@ -75,6 +75,7 @@ customerRouter
     .route('/login')
     .post(passport.authenticate('cust-local'), (req, res, next) => {
         console.log(res.cookies);
+        var cookie = req.cookies.cookieName;
         if (cookie === undefined) {
             // no: set a new cookie
             var randomNumber = Math.random().toString();
