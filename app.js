@@ -73,6 +73,7 @@ app.use(
         resave: false,
         saveUninitialized: true,
         store: sessionStore,
+        proxy: true,
         cookie: {
             maxAge: 1000 * 60 * 60 * 24, // Equals 1 day (1 day * 24 hr/1 day * 60 min/1 hr * 60 sec/1 min * 1000 ms / 1 sec)
         },
@@ -94,12 +95,12 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/logout', (req, res, next) => {
-        req.logout();
-        res.statusCode = 200;
-        res.setHeader('Content-Type', 'application/json');
-        res.json({ success: true, status: 'logout successful' });
-    })
-    //auth for facebook
+    req.logout();
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'application/json');
+    res.json({ success: true, status: 'logout successful' });
+});
+//auth for facebook
 app.get('/auth/facebook',
     passport.authenticate('cust-face'));
 // sharing will require app review from facebook
