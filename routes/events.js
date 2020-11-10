@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
-const Events = require('../models/events')
+const Events = require('../models/events');
 const { isAuth } = require('./authMiddleware');
 
 const eventRouter = express.Router();
@@ -29,7 +29,7 @@ eventRouter
                 res.statusCode = 200;
                 res.setHeader('Content-Type', 'application/json');
                 res.json(resp);
-            })
+            });
     })
     .put((req, res, next) => {
         res.statusCode = 403;
@@ -74,17 +74,17 @@ eventRouter
     .route('/search/:searchString')
     .get(async(req, res, next) => {
         try {
-            const titles = Events.find({ title: { $regex: '^' + req.params.searchString, $options: "i" } }).limit(10);
-            const cityTitle = Events.find({ city: { $regex: '^' + req.params.searchString, $options: "i" } }).limit(10);
-            const catgTitle = Events.find({ category: { $regex: '^' + req.params.searchString, $options: "i" } }).limit(10);
-            const result = await Promise.all([titles, cityTitle, catgTitle])
+            const titles = Events.find({ title: { $regex: '^' + req.params.searchString, $options: 'i' } }).limit(10);
+            const cityTitle = Events.find({ city: { $regex: '^' + req.params.searchString, $options: 'i' } }).limit(10);
+            const catgTitle = Events.find({ category: { $regex: '^' + req.params.searchString, $options: 'i' } }).limit(10);
+            const result = await Promise.all([titles, cityTitle, catgTitle]);
             res.statusCode = 200;
             res.setHeader('Content-Type', 'application/json');
             res.json(result);
         } catch (err) {
-            next(err)
+            next(err);
         }
-    })
+    });
 
 eventRouter
     .route('/:eventId')
@@ -108,10 +108,10 @@ eventRouter
     })
     .put((req, res, next) => {
         Events.findByIdAndUpdate(
-                req.params.eventId, {
-                    $set: req.body,
-                }
-            )
+            req.params.eventId, {
+                $set: req.body,
+            }
+        )
             .then(
                 (event) => {
                     res.statusCode = 200;
