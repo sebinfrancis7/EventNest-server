@@ -75,6 +75,8 @@ customerRouter
     .route('/login')
     .post(passport.authenticate('cust-local'), (req, res, next) => {
         console.log(req.headers);
+        console.log(req.cookies);
+        console.log(res.cookies);
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
         const { _id, purcahses, username, wishlist, display_name, imageUrl } = req.user

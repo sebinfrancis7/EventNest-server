@@ -16,15 +16,19 @@ authRouter.use(bodyParser.json());
 authRouter
     .route('/')
     .get(isAuth, (req, res, next) => {
+        console.log(req.headers);
+        console.log(req.cookies);
+        console.log(res.cookies);
         let userPrototype = Object.getPrototypeOf(req.user);
         if (userPrototype === Customers.prototype) {
             res.statusCode = 200;
             res.setHeader('Content-Type', 'application/json');
             res.json({ user: req.user, type: 'customer' });
+        } else {
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'application/json');
+            res.json({ user: req.user, type: 'organizer' });
         }
-        res.statusCode = 200;
-        res.setHeader('Content-Type', 'application/json');
-        res.json({ user: req.user, type: 'organizer' });
     });
 
 // //auth for facebook
