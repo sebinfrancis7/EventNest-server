@@ -20,11 +20,11 @@ authRouter
         if (userPrototype === Customers.prototype) {
             res.statusCode = 200;
             res.setHeader('Content-Type', 'application/json');
-            res.json({ success: true, user: req.user, type: 'customer' });
+            res.json({ user: req.user, type: 'customer' });
         }
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
-        res.json({ success: true, user: req.user, type: 'organizer' });
+        res.json({ user: req.user, type: 'organizer' });
     });
 
 // //auth for facebook
