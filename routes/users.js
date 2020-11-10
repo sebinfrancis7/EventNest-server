@@ -15,15 +15,19 @@ router.use(bodyParser.json());
 router
     .route('/')
     .get(isAuth, (req, res, next) => {
-        let userPrototype = Object.getPrototypeOf(req.user);
-        if (userPrototype === Customers.prototype) {
-            res.statusCode = 200;
-            res.setHeader('Content-Type', 'application/json');
-            res.json({ user: req.user, type: 'customer' });
-        } else {
-            res.statusCode = 200;
-            res.setHeader('Content-Type', 'application/json');
-            res.json({ user: req.user, type: 'organizer' });
+        try {
+            let userPrototype = Object.getPrototypeOf(req.user);
+            if (userPrototype === Customers.prototype) {
+                res.statusCode = 200;
+                res.setHeader('Content-Type', 'application/json');
+                res.json({ user: req.user, type: 'customer' });
+            } else {
+                res.statusCode = 200;
+                res.setHeader('Content-Type', 'application/json');
+                res.json({ user: req.user, type: 'organizer' });
+            }
+        } catch (err) {
+            next(err)
         }
     });
 

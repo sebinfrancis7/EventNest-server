@@ -16,9 +16,6 @@ authRouter.use(bodyParser.json());
 authRouter
     .route('/')
     .get(isAuth, (req, res, next) => {
-        console.log(req.headers);
-        console.log(req.cookies);
-        console.log(res.cookies);
         let userPrototype = Object.getPrototypeOf(req.user);
         if (userPrototype === Customers.prototype) {
             res.statusCode = 200;
