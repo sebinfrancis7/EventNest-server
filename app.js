@@ -45,8 +45,6 @@ app.use(function(req, res, next) {
     next();
 });
 
-// heroku cookies bugd
-app.set('trust proxy', 1);
 //mongoose connection
 mongoose.set('useUnifiedTopology', true);
 const mongo_url = 'mongodb+srv://sahil:sahil@cluster0.xclwr.mongodb.net/event-server?retryWrites=true&w=majority';
@@ -61,6 +59,8 @@ connect.then(
         console.log(err);
     }
 );
+// heroku cookies bug
+app.set('trust proxy', 1);
 
 const sessionStore = new MongoStore({
     mongooseConnection: mongoose.connection,

@@ -73,7 +73,16 @@ customerRouter
 
 customerRouter
     .route('/login')
-    .post(passport.authenticate('cust-local'), (req, res) => {
+    .post(passport.authenticate('cust-local'), (req, res, next) => {
+        console.log(res.cookies);
+        if (cookie === undefined) {
+            // no: set a new cookie
+            var randomNumber = Math.random().toString();
+            randomNumber = randomNumber.substring(2, randomNumber.length);
+            res.cookie('cookieName', randomNumber, { maxAge: 900000, httpOnly: true });
+            console.log('cookie created successfully');
+        }
+        console.log(req.cookies);
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
         const { _id, purcahses, username, wishlist, display_name, imageUrl } = req.user
