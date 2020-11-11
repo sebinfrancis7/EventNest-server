@@ -16,6 +16,12 @@ const customerSchema = new Schema({
             ref: 'events',
         },
         tickets: Number,
+        transactionid: {
+            type: String
+        },
+        transactionamount: {
+            type: String
+        }
     }],
     wishlist: [{
         type: Schema.Types.ObjectId,
