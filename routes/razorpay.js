@@ -63,7 +63,7 @@ payRouter
                 tickets: req.body.tickets || 1,
                 event: req.body.eventId ? mongoose.Types.ObjectId(req.body.eventId) : undefined,
             }
-            req.user.purchase.push(purchase);
+            req.user.purchases.push(purchase);
 
             // const transaction = new Transaction({
             //     transactionid: req.body.transactionid,
