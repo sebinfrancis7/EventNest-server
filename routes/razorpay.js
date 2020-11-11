@@ -1,8 +1,11 @@
 const express = require('express');
+const mongoose = require('mongoose');
+const passport = require('passport');
 const bodyParser = require('body-parser');
 const crypto = require('crypto');
 
 const Transaction = require('../models/transactions');
+const { isAuth } = require('./authMiddleware');
 // Razer Pay stuff
 const shortid = require('shortid');
 const Razorpay = require('razorpay');
@@ -44,15 +47,29 @@ payRouter
 
 payRouter
     .route('/payment')
-    .post((req, res, next) => {
+    .post(isAuth, (req, res, next) => {
         const generated_signature = crypto.createHmac('sha256', 'mfK26249sjg18WTJwyT0r31N') // key secret
         generated_signature.update(req.body.razorpay_order_id + "|" + req.body.transactionid)
         if (generated_signature.digest('hex') === req.body.razorpay_signature) {
-            const transaction = new Transaction({
+            let purchase = {
                 transactionid: req.body.transactionid,
                 transactionamount: req.body.transactionamount,
-            });
-            transaction.save(function(err, savedtransac) {
+                transactionid: {
+                    type: String
+                },
+                transactionamount: {
+                    type: String
+                },
+                tickets: req.body.tickets || 1,
+                event: req.body.eventId ? mongoose.Types.ObjectId(req.body.eventId) : undefined,
+            }
+            req.user.purchase.push(purchase);
+
+            // const transaction = new Transaction({
+            //     transactionid: req.body.transactionid,
+            //     transactionamount: req.body.transactionamount,
+            // });
+            req.user.save(function(err, savedtransac) {
                 if (err) {
                     console.log(err);
                     return res.status(500).send("Some Problem Occured");
