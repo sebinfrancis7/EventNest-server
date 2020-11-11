@@ -9,6 +9,7 @@ const { isAuth } = require('./authMiddleware');
 // Razer Pay stuff
 const shortid = require('shortid');
 const Razorpay = require('razorpay');
+const Customers = require('../models/customer');
 const razorpay = new Razorpay({
     key_id: 'rzp_test_Cly42HaznEIi1i',
     key_secret: 'mfK26249sjg18WTJwyT0r31N'
@@ -21,7 +22,7 @@ payRouter
     .route('/')
     .post(async(req, res, next) => {
         const payment_capture = 1;
-        const amount = req.body.amount;
+        const amount = req.body.amount || 0;
         const currency = 'INR';
 
         const options = {
@@ -41,6 +42,7 @@ payRouter
                 amount: response.amount
             });
         } catch (error) {
+            console.log(error)
             next(error)
         }
     });
@@ -54,30 +56,23 @@ payRouter
             let purchase = {
                 transactionid: req.body.transactionid,
                 transactionamount: req.body.transactionamount,
-                transactionid: {
-                    type: String
-                },
-                transactionamount: {
-                    type: String
-                },
+                transactionid: req.body.transactionid,
+                transactionamount: req.body.transactionamount,
                 tickets: req.body.tickets || 1,
                 event: req.body.eventId ? mongoose.Types.ObjectId(req.body.eventId) : undefined,
             }
+            console.log(req.user)
             req.user.purchases.push(purchase);
-
-            // const transaction = new Transaction({
-            //     transactionid: req.body.transactionid,
-            //     transactionamount: req.body.transactionamount,
-            // });
-            req.user.save(function(err, savedtransac) {
+            req.user.save(function(err, user) {
                 if (err) {
                     console.log(err);
                     return res.status(500).send("Some Problem Occured");
                 }
-                res.send({ transaction: savedtransac });
+                console.log(user)
+                res.send({ user: user });
             });
         } else {
-            return res.send('failed');
+            res.send('failed');
         }
     })
 

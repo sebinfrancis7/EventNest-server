@@ -10,7 +10,7 @@ const customerSchema = new Schema({
         trim: true,
     },
     email: String,
-    purcahses: [{
+    purchases: [{
         event: {
             type: Schema.Types.ObjectId,
             ref: 'events',
