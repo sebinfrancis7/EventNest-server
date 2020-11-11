@@ -4,7 +4,6 @@ const passport = require('passport');
 const bodyParser = require('body-parser');
 const crypto = require('crypto');
 
-const Transaction = require('../models/transactions');
 const { isAuth } = require('./authMiddleware');
 // Razer Pay stuff
 const shortid = require('shortid');
