@@ -45,7 +45,7 @@ payRouter
 payRouter
     .route('/payment')
     .post((req, res, next) => {
-        const generated_signature = crypto.createHmac('sha256', keysecret)
+        const generated_signature = crypto.createHmac('sha256', 'mfK26249sjg18WTJwyT0r31N') // key secret
         generated_signature.update(req.body.razorpay_order_id + "|" + req.body.transactionid)
         if (generated_signature.digest('hex') === req.body.razorpay_signature) {
             const transaction = new Transaction({
