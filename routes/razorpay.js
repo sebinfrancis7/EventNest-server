@@ -14,7 +14,7 @@ payRouter.use(bodyParser.json());
 
 payRouter
     .route('/')
-    .post(async (req, res) => {
+    .post(async(req, res, next) => {
         const payment_capture = 1;
         const amount = req.body.amount;
         const currency = 'INR';
@@ -28,14 +28,15 @@ payRouter
 
         try {
             const response = await razorpay.orders.create(options);
-            console.log(response);
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'application/json');
             res.json({
                 id: response.id,
                 currency: response.currency,
                 amount: response.amount
             });
         } catch (error) {
-            console.log(error);
+            next(error)
         }
     });
 
