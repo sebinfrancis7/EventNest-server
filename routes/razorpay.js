@@ -55,20 +55,29 @@ payRouter
             let purchase = {
                 transactionid: req.body.transactionid,
                 transactionamount: req.body.transactionamount,
-                transactionid: req.body.transactionid,
-                transactionamount: req.body.transactionamount,
                 tickets: req.body.tickets || 1,
                 event: req.body.eventId ? mongoose.Types.ObjectId(req.body.eventId) : undefined,
             }
-            console.log(req.user)
             req.user.purchases.push(purchase);
             req.user.save(function(err, user) {
                 if (err) {
                     console.log(err);
                     return res.status(500).send("Some Problem Occured");
                 }
-                console.log(user)
-                res.send({ user: user });
+                Events.findById(req.body.eventId)
+                    .then(events => {
+                            let tickets = req.body.tickets ? req.body.tickets : 1
+                            events.attendees = events.attendees + tickets;
+                            events.save();
+                        },
+                        (err) => next(err))
+                    .then(resp => {
+                            res.statusCode = 200;
+                            res.setHeader('Content-Type', 'application/json');
+                            res.json({ user: user });
+                        },
+                        (err) => next(err))
+                    .catch((err) => next(err));
             });
         } else {
             res.send('failed');
