@@ -100,7 +100,9 @@ payRouter
                 //         .catch((err) => next(err));
                 // });
         } else {
-            res.send('failed');
+            res.statusCode = 403;
+            res.setHeader('Content-Type', 'application/json');
+            res.json({ msg: "failed" });
         }
     })
 
