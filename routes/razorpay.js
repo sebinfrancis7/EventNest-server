@@ -9,6 +9,7 @@ const { isAuth } = require('./authMiddleware');
 const shortid = require('shortid');
 const Razorpay = require('razorpay');
 const Customers = require('../models/customer');
+const Events = require('../models/events');
 const razorpay = new Razorpay({
     key_id: 'rzp_test_Cly42HaznEIi1i',
     key_secret: 'mfK26249sjg18WTJwyT0r31N'
