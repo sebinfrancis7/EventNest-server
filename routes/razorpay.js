@@ -60,27 +60,44 @@ payRouter
                 tickets: req.body.tickets || 1,
                 event: req.body.eventId ? mongoose.Types.ObjectId(req.body.eventId) : undefined,
             }
-            req.user.purchases.push(purchase);
-            req.user.save(function(err, user) {
-                if (err) {
-                    console.log(err);
-                    return res.status(500).send("Some Problem Occured");
-                }
-                Events.findById(req.body.eventId)
-                    .then(events => {
-                            let tickets = req.body.tickets ? req.body.tickets : 1
-                            events.attendees = events.attendees + tickets;
-                            events.save();
-                        },
-                        (err) => next(err))
-                    .then(resp => {
-                            res.statusCode = 200;
-                            res.setHeader('Content-Type', 'application/json');
-                            res.json({ user: user });
-                        },
-                        (err) => next(err))
-                    .catch((err) => next(err));
-            });
+            Customers.findByIdAndUpdate(req.user.id, { $push: { purchases: purchase } })
+                .then(user => {
+                    Events.findById(req.body.eventId)
+                        .then(events => {
+                                let tickets = req.body.tickets ? req.body.tickets : 1
+                                events.attendees = events.attendees + tickets;
+                                events.save();
+                            },
+                            (err) => next(err))
+                        .then(resp => {
+                                res.statusCode = 200;
+                                res.setHeader('Content-Type', 'application/json');
+                                res.json({ user: user });
+                            },
+                            (err) => next(err))
+                        .catch((err) => next(err));
+                })
+                // req.user.purchases.push(purchase);
+                // req.user.save(function(err, user) {
+                //     if (err) {
+                //         console.log(err);
+                //         return res.status(500).send("Some Problem Occured");
+                //     }
+                //     Events.findById(req.body.eventId)
+                //         .then(events => {
+                //                 let tickets = req.body.tickets ? req.body.tickets : 1
+                //                 events.attendees = events.attendees + tickets;
+                //                 events.save();
+                //             },
+                //             (err) => next(err))
+                //         .then(resp => {
+                //                 res.statusCode = 200;
+                //                 res.setHeader('Content-Type', 'application/json');
+                //                 res.json({ user: user });
+                //             },
+                //             (err) => next(err))
+                //         .catch((err) => next(err));
+                // });
         } else {
             res.send('failed');
         }
