@@ -22,10 +22,11 @@ payRouter
     .post(async(req, res, next) => {
         const payment_capture = 1;
         const amount = req.body.amount || 0;
+        const tickets = req.body.tickets || 1;
         const currency = 'INR';
 
         const options = {
-            amount: amount * 100,
+            amount: amount * 100 * tickets,
             currency,
             receipt: shortid.generate(),
             payment_capture
