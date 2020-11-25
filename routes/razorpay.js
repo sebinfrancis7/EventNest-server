@@ -62,6 +62,7 @@ payRouter
             }
             Customers.findByIdAndUpdate(req.user.id, { $push: { purchases: purchase } })
                 .then(user => {
+                    console.log(user)
                     Events.findById(req.body.eventId)
                         .then(events => {
                                 let tickets = req.body.tickets ? req.body.tickets : 1
