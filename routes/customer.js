@@ -81,6 +81,18 @@ customerRouter
     });
 
 customerRouter
+    .route('/wishlist')
+    .get(isAuth, (req, res, next) => {
+        Customers.findById(req.user.id)
+            .populate('wishlist')
+            .then(user => {
+                res.statusCode = 200;
+                res.setHeader('Content-Type', 'application/json');
+                res.json(user.wishlist);
+            })
+    });
+
+customerRouter
     .route('/:customerId')
     .get((req, res, next) => {
         Customers.findById(req.params.customerId)
