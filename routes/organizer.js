@@ -37,14 +37,18 @@ organizerRouter
                     res.setHeader('Content-Type', 'application/json');
                     res.json({ err: err });
                 } else {
-                    passport.authenticate('org-local')(req, res, () => {
-                        res.statusCode = 200;
-                        res.setHeader('Content-Type', 'application/json');
-                        res.json({
-                            success: true,
-                            user_id: user._id
-                        });
-                    });
+                    if (req.body.email) user.email = req.body.email;
+                    user.save()
+                        .then(() => {
+                            passport.authenticate('org-local')(req, res, () => {
+                                res.statusCode = 200;
+                                res.setHeader('Content-Type', 'application/json');
+                                res.json({
+                                    success: true,
+                                    user_id: user._id
+                                });
+                            });
+                        }, err => next(err));
                 }
             }
         );
@@ -97,10 +101,10 @@ organizerRouter
     })
     .put((req, res, next) => {
         Organizers.findByIdAndUpdate(
-            req.params.organizerId, {
-                $set: req.body,
-            }
-        )
+                req.params.organizerId, {
+                    $set: req.body,
+                }
+            )
             .then(
                 (organizer) => {
                     res.statusCode = 200;
