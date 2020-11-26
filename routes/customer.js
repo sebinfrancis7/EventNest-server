@@ -7,7 +7,6 @@ const Customers = require('../models/customer');
 const Events = require('../models/events');
 
 const { isAuth } = require('./authMiddleware');
-const events = require('../models/events');
 
 const customerRouter = express.Router();
 
