@@ -13,7 +13,7 @@ const customerSchema = new Schema({
     purchases: [{
         event: {
             type: Schema.Types.ObjectId,
-            ref: 'events',
+            ref: 'event',
         },
         tickets: Number,
         transactionid: {
@@ -25,7 +25,7 @@ const customerSchema = new Schema({
     }],
     wishlist: [{
         type: Schema.Types.ObjectId,
-        ref: 'events',
+        ref: 'event',
     }],
     facebookId: {
         type: String,
