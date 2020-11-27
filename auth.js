@@ -1,6 +1,8 @@
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var FacebookStrategy = require('passport-facebook').Strategy;
+var GoogleStrategy = require('passport-google-oauth').OAuthStrategy;
+
 var Customer = require('./models/customer');
 var Organizer = require('./models/organizer');
 
@@ -28,6 +30,42 @@ passport.use('cust-face', new FacebookStrategy({
                     display_name: profile.displayName,
                     email: profile.email,
                     imageUrl: profile.photos[0].value //needs testing
+                });
+                customer.save(function(err) {
+                    return done(err, customer);
+                });
+            } else {
+                //found Customer. Return
+                return done(err, customer);
+            }
+        });
+    }
+));
+
+// Use the GoogleStrategy within Passport.
+//   Strategies in passport require a `verify` function, which accept
+//   credentials (in this case, a token, tokenSecret, and Google profile), and
+//   invoke a callback with a user object.
+passport.use('cust-google', new GoogleStrategy({
+        consumerKey: '910242383718-hge3a4i30mqv8hk6ifkaf7lrpmve6qp2.apps.googleusercontent.com',
+        consumerSecret: 'xm25vzDBmDsg9KLBd3CZ6_wn',
+        callbackURL: "https://eventnest-server.herokuapp.com/auth/google/callback"
+    },
+    function(token, tokenSecret, profile, done) {
+        //check Customer table for anyone with a google ID of profile.id
+        Customer.findOne({
+            'googleId': profile.id
+        }, function(err, customer) {
+            if (err) {
+                return done(err);
+            }
+            //No Customer was found... so create a new Customer with values from google (all the profile. stuff)
+            if (!customer) {
+                customer = new Customer({
+                    googleId: profile.id,
+                    display_name: profile.given_name,
+                    email: profile.email,
+                    imageUrl: profile.picture //needs testing
                 });
                 customer.save(function(err) {
                     return done(err, customer);
