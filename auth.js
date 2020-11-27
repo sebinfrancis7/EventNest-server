@@ -47,8 +47,8 @@ passport.use('cust-face', new FacebookStrategy({
 //   credentials (in this case, a token, tokenSecret, and Google profile), and
 //   invoke a callback with a user object.
 passport.use('cust-google', new GoogleStrategy({
-        consumerKey: '657509677837-t0e0uqsjuktvbv9qe2nhc9bevkdngvis.apps.googleusercontent.com',
-        consumerSecret: 'YLIEQgDKQrjgc7EI8fO7gg9J',
+        clientID: '657509677837-t0e0uqsjuktvbv9qe2nhc9bevkdngvis.apps.googleusercontent.com',
+        clientSecret: 'YLIEQgDKQrjgc7EI8fO7gg9J',
         callbackURL: "https://eventnest-server.herokuapp.com/auth/google/callback"
     },
     function(token, tokenSecret, profile, done) {
