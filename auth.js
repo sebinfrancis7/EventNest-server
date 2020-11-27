@@ -81,8 +81,8 @@ passport.use('cust-google', new GoogleStrategy({
 ));
 
 passport.use('cust-twitter', new TwitterStrategy({
-        consumerKey: alR37TJ1r1g6T359LpBZ08hkk,
-        consumerSecret: H1bYlT6KuSxsNgfVOx7b1W2AglkkrB52C49PsZ6W0ocinfRQnP,
+        consumerKey: 'alR37TJ1r1g6T359LpBZ08hkk',
+        consumerSecret: 'H1bYlT6KuSxsNgfVOx7b1W2AglkkrB52C49PsZ6W0ocinfRQnP',
         callbackURL: "https://eventnest-server.herokuapp.com/auth/twitter/callback"
     },
     function(token, tokenSecret, profile, done) {
