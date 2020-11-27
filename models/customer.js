@@ -32,6 +32,9 @@ const customerSchema = new Schema({
     },
     googleId: {
         type: String,
+    },
+    twitterId: {
+        type: String,
     }
 }, { timestamps: true });
 

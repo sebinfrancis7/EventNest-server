@@ -2,7 +2,7 @@ var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var FacebookStrategy = require('passport-facebook').Strategy;
 var GoogleStrategy = require('passport-google-oauth20').Strategy;
-
+var TwitterStratergy = require('passport-twitter').Strategy;
 var Customer = require('./models/customer');
 var Organizer = require('./models/organizer');
 
@@ -64,6 +64,39 @@ passport.use('cust-google', new GoogleStrategy({
             if (!customer) {
                 customer = new Customer({
                     googleId: profile.id,
+                    username: profile.id,
+                    display_name: profile.displayName,
+                    email: profile.email,
+                    imageUrl: profile.photos[0].value //needs testing
+                });
+                customer.save(function(err) {
+                    return done(err, customer);
+                });
+            } else {
+                //found Customer. Return
+                return done(err, customer);
+            }
+        });
+    }
+));
+
+passport.use('cust-twitter', new TwitterStrategy({
+        consumerKey: alR37TJ1r1g6T359LpBZ08hkk,
+        consumerSecret: H1bYlT6KuSxsNgfVOx7b1W2AglkkrB52C49PsZ6W0ocinfRQnP,
+        callbackURL: "https://eventnest-server.herokuapp.com/auth/twitter/callback"
+    },
+    function(token, tokenSecret, profile, done) {
+        //check Customer table for anyone with a twitter ID of profile.id
+        Customer.findOne({
+            'twitterId': profile.id
+        }, function(err, customer) {
+            if (err) {
+                return done(err);
+            }
+            //No Customer was found... so create a new Customer with values from twitter (all the profile. stuff)
+            if (!customer) {
+                customer = new Customer({
+                    twitterId: profile.id,
                     username: profile.id,
                     display_name: profile.displayName,
                     email: profile.email,

@@ -136,6 +136,21 @@ app.get('/auth/google/callback',
         res.redirect('https://localhost:3000/');
     });
 
+// Redirect the user to Twitter for authentication.  When complete, Twitter
+// will redirect the user back to the application at
+//   /auth/twitter/callback
+app.get('/auth/twitter', passport.authenticate('twitter'));
+
+// Twitter will redirect the user to this URL after approval.  Finish the
+// authentication process by attempting to obtain an access token.  If
+// access was granted, the user will be logged in.  Otherwise,
+// authentication has failed.
+app.get('/auth/twitter/callback',
+    passport.authenticate('twitter', {
+        successRedirect: 'https://localhost:3000/',
+        failureRedirect: 'https://localhost:3000/signin'
+    }));
+
 //routers setup     
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
