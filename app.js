@@ -123,7 +123,7 @@ app.get('/auth/facebook/callback',
 //   redirecting the user to google.com.  After authorization, Google
 //   will redirect the user back to this application at /auth/google/callback
 app.get('/auth/google',
-    passport.authenticate('cust-google', { scope: ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile'] }));
+    passport.authenticate('cust-google', { scope: ['./auth/userinfo.profile'] }));
 
 // GET /auth/google/callback
 //   Use passport.authenticate() as route middleware to authenticate the
