@@ -104,49 +104,27 @@ app.get('/logout', (req, res, next) => {
     res.setHeader('Content-Type', 'application/json');
     res.json({ success: true, status: 'logout successful' });
 });
-//auth for facebook
+
+
 app.get('/auth/facebook',
     passport.authenticate('cust-face'));
-// sharing will require app review from facebook
-// passport.authenticate('facebook', { authType: 'reauthenticate', scope: ['manage_pages', publish_video] }));  // to share on facebook
-
 app.get('/auth/facebook/callback',
     passport.authenticate('cust-face', { failureRedirect: 'http://localhost:3000/signin' }),
     function(req, res) {
-        // Successful authentication, redirect home.
         res.redirect('http://localhost:3000/');
     });
 
-// GET /auth/google
-//   Use passport.authenticate() as route middleware to authenticate the
-//   request.  The first step in Google authentication will involve
-//   redirecting the user to google.com.  After authorization, Google
-//   will redirect the user back to this application at /auth/google/callback
 app.get('/auth/google',
     passport.authenticate('cust-google', { scope: ['profile'] }));
-
-// GET /auth/google/callback
-//   Use passport.authenticate() as route middleware to authenticate the
-//   request.  If authentication fails, the user will be redirected back to the
-//   login page.  Otherwise, the primary route function function will be called,
-//   which, in this example, will redirect the user to the home page.
 app.get('/auth/google/callback',
     passport.authenticate('cust-google', { failureRedirect: 'https://localhost:3000/signin' }),
     function(req, res) {
         res.redirect('https://localhost:3000/');
     });
 
-// Redirect the user to Twitter for authentication.  When complete, Twitter
-// will redirect the user back to the application at
-//   /auth/twitter/callback
-app.get('/auth/twitter', passport.authenticate('twitter'));
-
-// Twitter will redirect the user to this URL after approval.  Finish the
-// authentication process by attempting to obtain an access token.  If
-// access was granted, the user will be logged in.  Otherwise,
-// authentication has failed.
+app.get('/auth/twitter', passport.authenticate('cust-twitter'));
 app.get('/auth/twitter/callback',
-    passport.authenticate('twitter', {
+    passport.authenticate('cust-twitter', {
         successRedirect: 'https://localhost:3000/',
         failureRedirect: 'https://localhost:3000/signin'
     }));
