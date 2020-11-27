@@ -65,9 +65,9 @@ passport.use('cust-google', new GoogleStrategy({
                 customer = new Customer({
                     googleId: profile.id,
                     username: profile.id,
-                    display_name: profile.name,
+                    display_name: profile.displayName,
                     email: profile.email,
-                    imageUrl: profile.picture //needs testing
+                    imageUrl: profile.photos[0].value //needs testing
                 });
                 customer.save(function(err) {
                     return done(err, customer);
