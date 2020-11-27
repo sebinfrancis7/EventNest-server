@@ -61,11 +61,13 @@ passport.use('cust-google', new GoogleStrategy({
             }
             //No Customer was found... so create a new Customer with values from google (all the profile. stuff)
             if (!customer) {
+                console.log(profile);
                 customer = new Customer({
                     googleId: profile.id,
-                    display_name: profile.given_name,
-                    email: profile.email,
-                    imageUrl: profile.picture //needs testing
+
+                    // display_name: profile.given_name,
+                    // email: profile.email,
+                    // imageUrl: profile.picture //needs testing
                 });
                 customer.save(function(err) {
                     return done(err, customer);
