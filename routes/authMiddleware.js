@@ -19,10 +19,16 @@ module.exports.isOrg = (req, res, next) => {
     if (req.isAuthenticated()) {
         let userPrototype = Object.getPrototypeOf(req.user);
         if (userPrototype === Organizers.prototype) next();
+        else {
+            res.status(401).json({
+                msg: 'You are not authorized to view this resource',
+            });
+        }
+    } else {
+        res.status(401).json({
+            msg: 'You are not authorized to view this resource',
+        });
     }
-    res.status(401).json({
-        msg: 'You are not authorized to view this resource',
-    });
 
 };
 
