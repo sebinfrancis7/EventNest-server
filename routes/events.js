@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
 const Events = require('../models/events');
-const { isAuth } = require('./authMiddleware');
+const { isAuth, isOrg } = require('./authMiddleware');
 
 const eventRouter = express.Router();
 
@@ -23,8 +23,11 @@ eventRouter
             )
             .catch((err) => next(err));
     })
-    .post((req, res, next) => {
-        Events.create(req.body)
+    .post(isOrg, (req, res, next) => {
+        Events.create({
+                ...req.body,
+                organizer: '5fa02de7d033934e1622fadc'
+            })
             .then(resp => {
                 res.statusCode = 200;
                 res.setHeader('Content-Type', 'application/json');
@@ -108,10 +111,10 @@ eventRouter
     })
     .put((req, res, next) => {
         Events.findByIdAndUpdate(
-            req.params.eventId, {
-                $set: req.body,
-            }
-        )
+                req.params.eventId, {
+                    $set: req.body,
+                }
+            )
             .then(
                 (event) => {
                     res.statusCode = 200;
