@@ -75,8 +75,7 @@ customerRouter
     .post(passport.authenticate('cust-local'), (req, res, next) => {
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
-        const { _id, purcahses, username, wishlist, display_name, imageUrl } = req.user
-        res.json({ _id: _id, username: username, display_name: display_name, imageUrl: imageUrl, purcahses: purcahses, wishlist: wishlist });
+        res.json(req.user);
     });
 
 customerRouter
