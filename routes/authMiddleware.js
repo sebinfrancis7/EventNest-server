@@ -17,11 +17,9 @@ module.exports.isAuth = (req, res, next) => {
 module.exports.isOrg = (req, res, next) => {
     //console.log(req)
     if (req.isAuthenticated()) {
-        console.log('user verified')
         let userPrototype = Object.getPrototypeOf(req.user);
         if (userPrototype === Organizers.prototype) next();
         else {
-            console.log('org not verified')
             res.status(401).json({
                 msg: 'You are not authorized to view this resource',
             });

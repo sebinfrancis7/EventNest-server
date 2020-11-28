@@ -109,9 +109,9 @@ app.get('/logout', (req, res, next) => {
 app.get('/auth/facebook',
     passport.authenticate('cust-face'));
 app.get('/auth/facebook/callback',
-    passport.authenticate('cust-face', { failureRedirect: 'http://localhost:3000/signin' }),
+    passport.authenticate('cust-face', { failureRedirect: 'https://localhost:3000/signin' }),
     function(req, res) {
-        res.redirect('http://localhost:3000/');
+        res.redirect('/');
     });
 
 app.get('/auth/google',
