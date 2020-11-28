@@ -95,11 +95,11 @@ customerRouter
     .route('/purchases')
     .get(isAuth, (req, res, next) => {
         Customers.findById(req.user.id)
-            .populate('purchases')
+            .populate('purchases.event')
             .then(user => {
                 res.statusCode = 200;
                 res.setHeader('Content-Type', 'application/json');
-                res.json(user.wishlist);
+                res.json(user.purcahses);
             })
     });
 
