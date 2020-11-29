@@ -19,29 +19,44 @@ authRouter
         let userPrototype = Object.getPrototypeOf(req.user);
         if (userPrototype === Customers.prototype) {
             res.statusCode = 200;
-            res.setHeader('Content-Type', 'application/json');
+            res.setHeader('Content-Type', 'authRouterlication/json');
             res.json({ user: req.user, type: 'customer' });
         } else {
             res.statusCode = 200;
-            res.setHeader('Content-Type', 'application/json');
+            res.setHeader('Content-Type', 'authRouterlication/json');
             res.json({ user: req.user, type: 'organizer' });
         }
     });
 
-// //auth for facebook
-// // sharing will require app review from facebook
-// // passport.authenticate('facebook', { authType: 'reauthenticate', scope: ['manage_pages', publish_video] }));  // to share on facebook
-// authRouter
-//     .route('/facebook')
-//     .get((req, res, next) => {
-//         passport.authenticate('cust-face');
-//     });
 
-// authRouter
-// .route('/facebook')
-// .get(passport.authenticate('cust-face', { failureRedirect: '/customers/login' }),(req, res, next) => {
-//         // Successful authentication, redirect home.
-//         res.redirect('/');
-//     });
+authRouter
+    .get('/facebook', passport.authenticate('cust-face'));
+
+authRouter
+    .get('/facebook/callback',
+        passport.authenticate('cust-face', { failureRedirect: 'https://localhost:3000/signin' }),
+        function(req, res) {
+            res.redirect('https://localhost:3000/');
+        });
+
+authRouter
+    .get('/google', passport.authenticate('cust-google', { scope: ['profile'] }));
+
+authRouter
+    .get('/google/callback',
+        passport.authenticate('cust-google', { failureRedirect: 'https://localhost:3000/signin' }),
+        function(req, res) {
+            res.redirect('https://localhost:3000/');
+        });
+
+authRouter
+    .get('/twitter', passport.authenticate('cust-twitter'));
+
+authRouter
+    .get('/twitter/callback',
+        passport.authenticate('cust-twitter', {
+            successRedirect: 'https://localhost:3000/',
+            failureRedirect: 'https://localhost:3000/signin'
+        }));
 
 module.exports = authRouter;

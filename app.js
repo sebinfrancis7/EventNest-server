@@ -8,6 +8,7 @@ var logger = require('morgan');
 //introduced dependencies
 var mongoose = require('mongoose');
 var cors = require('cors');
+const multer = require('multer');
 var passport = require('passport');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
@@ -21,10 +22,12 @@ var organizerRouter = require('./routes/organizer');
 var eventsRouter = require('./routes/events');
 var authRouter = require('./routes/auth');
 var payRouter = require('./routes/razorpay');
+var publicRouter = require('./routes/public');
+var fs = require('fs');
 
 var app = express();
 
-// app.use(cors());
+//app.use(cors());
 // Add headers
 app.use(function(req, res, next) {
 
@@ -106,28 +109,61 @@ app.get('/logout', (req, res, next) => {
 });
 
 
-app.get('/auth/facebook',
-    passport.authenticate('cust-face'));
-app.get('/auth/facebook/callback',
-    passport.authenticate('cust-face', { failureRedirect: 'https://localhost:3000/signin' }),
-    function(req, res) {
-        res.redirect('https://localhost:3000/');
-    });
+// app.get('/auth/facebook',
+//     passport.authenticate('cust-face'));
+// app.get('/auth/facebook/callback',
+//     passport.authenticate('cust-face', { failureRedirect: 'https://localhost:3000/signin' }),
+//     function(req, res) {
+//         res.redirect('https://localhost:3000/');
+//     });
 
-app.get('/auth/google',
-    passport.authenticate('cust-google', { scope: ['profile'] }));
-app.get('/auth/google/callback',
-    passport.authenticate('cust-google', { failureRedirect: 'https://localhost:3000/signin' }),
-    function(req, res) {
-        res.redirect('https://localhost:3000/');
-    });
+// app.get('/auth/google',
+//     passport.authenticate('cust-google', { scope: ['profile'] }));
+// app.get('/auth/google/callback',
+//     passport.authenticate('cust-google', { failureRedirect: 'https://localhost:3000/signin' }),
+//     function(req, res) {
+//         res.redirect('https://localhost:3000/');
+//     });
 
-app.get('/auth/twitter', passport.authenticate('cust-twitter'));
-app.get('/auth/twitter/callback',
-    passport.authenticate('cust-twitter', {
-        successRedirect: 'https://localhost:3000/',
-        failureRedirect: 'https://localhost:3000/signin'
-    }));
+// app.get('/auth/twitter', passport.authenticate('cust-twitter'));
+// app.get('/auth/twitter/callback',
+//     passport.authenticate('cust-twitter', {
+//         successRedirect: 'https://localhost:3000/',
+//         failureRedirect: 'https://localhost:3000/signin'
+//     }));
+
+// const storage = multer.diskStorage({
+//     destination: function(req, file, cb) {
+//         cb(null, 'public/images');
+//     },
+
+//     // By default, multer removes file extensions so let's add them back
+//     filename: function(req, file, cb) {
+//         cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+//     }
+// });
+// const fileFilter = (req, file, cb) => {
+//     if (file.mimetype == 'image/jpeg' || file.mimetype == 'image/png') {
+//         cb(null, true);
+//     } else {
+//         cb(null, false);
+//     }
+// }
+// const upload = multer({ storage: storage, fileFilter: fileFilter });
+
+// app
+//     .post('/upload', upload.single('image'), (req, res, next) => {
+//         try {
+//             var fullUrl = req.protocol + '://' + req.get('host') + '/' + req.file.path;
+//             return res.status(201).json({...req.file, url: fullUrl });
+//         } catch (error) {
+//             next(error);
+//         }
+//     });
+
+// app.get('/images/:filename', (req, res, next) => {
+//     res.sendFile(path.join(__dirname, 'public/images', req.params.filename))
+// })
 
 //routers setup     
 app.use('/', indexRouter);
@@ -137,6 +173,39 @@ app.use('/customer', customerRouter);
 app.use('/organizer', organizerRouter);
 app.use('/events', eventsRouter);
 app.use('/razorpay', payRouter);
+app.use('/public', publicRouter);
+
+// var dir = path.join(__dirname, 'public');
+// var mime = {
+//     html: 'text/html',
+//     txt: 'text/plain',
+//     css: 'text/css',
+//     gif: 'image/gif',
+//     jpg: 'image/jpeg',
+//     png: 'image/png',
+//     svg: 'image/svg+xml',
+//     js: 'application/javascript'
+// };
+
+// app.get('*', function(req, res) {
+//     console.log('here')
+//     console.log(req.path.replace(/\/$/, '/index.html'))
+//     var file = path.join(dir, req.path.replace(/\/$/, '/index.html'));
+//     console.log(file)
+//     if (file.indexOf(dir + path.sep) !== 0) {
+//         return res.status(403).end('Forbidden');
+//     }
+//     var type = mime[path.extname(file).slice(1)] || 'text/plain';
+//     var s = fs.createReadStream(file);
+//     s.on('open', function() {
+//         res.set('Content-Type', type);
+//         s.pipe(res);
+//     });
+//     s.on('error', function() {
+//         res.set('Content-Type', 'text/plain');
+//         res.status(404).end('Not found');
+//     });
+// });
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
