@@ -29,14 +29,17 @@ authRouter
     });
 
 
+const signInURI = 'https://eventnest.herokuapp.com/signin'
+const homeURI = 'https://eventnest.herokuapp.com/'
+
 authRouter
     .get('/facebook', passport.authenticate('cust-face'));
 
 authRouter
     .get('/facebook/callback',
-        passport.authenticate('cust-face', { failureRedirect: 'https://localhost:3000/signin' }),
+        passport.authenticate('cust-face', { failureRedirect: signInURI }),
         function(req, res) {
-            res.redirect('https://localhost:3000/');
+            res.redirect(homeURI);
         });
 
 authRouter
@@ -44,9 +47,9 @@ authRouter
 
 authRouter
     .get('/google/callback',
-        passport.authenticate('cust-google', { failureRedirect: 'https://localhost:3000/signin' }),
+        passport.authenticate('cust-google', { failureRedirect: signInURI }),
         function(req, res) {
-            res.redirect('https://localhost:3000/');
+            res.redirect(homeURI);
         });
 
 authRouter
@@ -55,8 +58,8 @@ authRouter
 authRouter
     .get('/twitter/callback',
         passport.authenticate('cust-twitter', {
-            successRedirect: 'https://localhost:3000/',
-            failureRedirect: 'https://localhost:3000/signin'
+            successRedirect: homeURI,
+            failureRedirect: signInURI
         }));
 
 module.exports = authRouter;
