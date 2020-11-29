@@ -16,6 +16,9 @@ const eventSchema = new Schema({
         ref: 'organizer',
         required: true
     },
+    orgName: {
+        type: String
+    },
     title: {
         type: String,
         index: true,

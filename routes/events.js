@@ -26,7 +26,8 @@ eventRouter
     .post(isOrg, (req, res, next) => {
         Events.create({
                 ...req.body,
-                organizer: '5fa02de7d033934e1622fadc'
+                organizer: req.user.id,
+                orgName: req.user.username
             })
             .then(resp => {
                 res.statusCode = 200;
