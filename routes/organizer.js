@@ -82,7 +82,7 @@ organizerRouter
 organizerRouter
     .route('/events')
     .get(isAuth, (req, res, next) => {
-        Customers.findById(req.user.id)
+        Organizers.findById(req.user.id)
             .populate('events')
             .then(user => {
                 res.statusCode = 200;
