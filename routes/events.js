@@ -114,7 +114,7 @@ eventRouter
         Events.findByIdAndUpdate(
                 req.params.eventId, {
                     $set: req.body,
-                }
+                }, { new: true }
             )
             .then(
                 (event) => {

@@ -115,7 +115,7 @@ organizerRouter
         Organizers.findByIdAndUpdate(
                 req.params.organizerId, {
                     $set: req.body,
-                }
+                }, { new: true }
             )
             .then(
                 (organizer) => {

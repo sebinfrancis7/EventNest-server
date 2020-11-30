@@ -126,7 +126,7 @@ customerRouter
         Customers.findByIdAndUpdate(
                 req.params.customerId, {
                     $set: req.body,
-                }
+                }, { new: true }
             )
             .then(
                 (customer) => {
