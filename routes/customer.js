@@ -43,10 +43,7 @@ customerRouter
                             passport.authenticate('cust-local')(req, res, () => {
                                 res.statusCode = 200;
                                 res.setHeader('Content-Type', 'application/json');
-                                res.json({
-                                    success: true,
-                                    user_id: user._id
-                                });
+                                res.json(req.user);
                             });
                         }, err => next(err));
                 }
