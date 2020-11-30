@@ -6,10 +6,10 @@ const organizerSchema = new Schema({
     imageUrl: String,
     events: [{
         type: Schema.Types.ObjectId,
-        ref: 'events',
+        ref: 'event',
     }],
     email: String,
-    // more details
+    // add more details
 });
 
 organizerSchema.plugin(passportLocalMongoose);

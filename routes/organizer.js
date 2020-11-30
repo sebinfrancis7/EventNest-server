@@ -80,6 +80,18 @@ organizerRouter
     });
 
 organizerRouter
+    .route('/events')
+    .get(isAuth, (req, res, next) => {
+        Customers.findById(req.user.id)
+            .populate('events')
+            .then(user => {
+                res.statusCode = 200;
+                res.setHeader('Content-Type', 'application/json');
+                res.json(user.events);
+            })
+    });
+
+organizerRouter
     .route('/:organizerId')
     .get((req, res, next) => {
         Organizers.findById(req.params.organizerId)
