@@ -29,8 +29,8 @@ authRouter
     });
 
 
-const signInURI = 'https://eventnest.herokuapp.com/signin'
-const homeURI = 'https://eventnest.herokuapp.com/'
+const signInURI = process.env.FRONTEND_URL + '/signin';
+const homeURI = process.env.FRONTEND_URL
 
 authRouter
     .get('/facebook', passport.authenticate('cust-face'));
