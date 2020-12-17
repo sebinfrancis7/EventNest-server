@@ -51,8 +51,8 @@ app.use(function(req, res, next) {
 
 //mongoose connection
 mongoose.set('useUnifiedTopology', true);
-const mongo_url = 'mongodb+srv://sahil:sahil@cluster0.xclwr.mongodb.net/event-server?retryWrites=true&w=majority';
-//const mongo_url = process.env.DB || 'mongodb://localhost:27017/event-server';
+const mongo_url = process.env.MONGO_URL;
+
 const connect = mongoose.connect(mongo_url, { useNewUrlParser: true });
 
 connect.then(
@@ -73,7 +73,7 @@ const sessionStore = new MongoStore({
 app.use(
     session({
         //secret: process.env.SECRET,
-        secret: 'WARNING : CHANGE THIS',
+        secret: process.env.SESSION_SECRET,
         resave: false,
         saveUninitialized: true,
         store: sessionStore,

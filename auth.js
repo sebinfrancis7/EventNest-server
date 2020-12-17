@@ -10,9 +10,9 @@ passport.use('cust-local', new LocalStrategy(Customer.authenticate()));
 passport.use('org-local', new LocalStrategy(Organizer.authenticate()));
 
 passport.use('cust-face', new FacebookStrategy({
-        clientID: '355231605550625',
-        clientSecret: 'cc3e6558d08e0d4d5a0f03959b41a3f7',
-        callbackURL: "https://eventnest-server.herokuapp.com/auth/facebook/callback",
+        clientID: process.env.FB_KEY,
+        clientSecret: process.env.FB_SECRET,
+        callbackURL: process.env.SERVER_URL + "/auth/facebook/callback",
         profileFields: ['id', 'displayName', 'photos', 'email'],
     },
     function(accessToken, refreshToken, profile, done) {
@@ -48,9 +48,9 @@ passport.use('cust-face', new FacebookStrategy({
 //   credentials (in this case, a token, tokenSecret, and Google profile), and
 //   invoke a callback with a user object.
 passport.use('cust-google', new GoogleStrategy({
-        clientID: '910242383718-hge3a4i30mqv8hk6ifkaf7lrpmve6qp2.apps.googleusercontent.com',
-        clientSecret: 'xm25vzDBmDsg9KLBd3CZ6_wn',
-        callbackURL: "https://eventnest-server.herokuapp.com/auth/google/callback"
+        clientID: process.env.GOOGLE_KEY,
+        clientSecret: process.env.GOOGLE_SECRET,
+        callbackURL: process.env.SERVER_URL + "/auth/google/callback"
     },
     function(token, tokenSecret, profile, done) {
         //check Customer table for anyone with a google ID of profile.id
@@ -81,9 +81,9 @@ passport.use('cust-google', new GoogleStrategy({
 ));
 
 passport.use('cust-twitter', new TwitterStrategy({
-        consumerKey: 'alR37TJ1r1g6T359LpBZ08hkk',
-        consumerSecret: 'H1bYlT6KuSxsNgfVOx7b1W2AglkkrB52C49PsZ6W0ocinfRQnP',
-        callbackURL: "https://eventnest-server.herokuapp.com/auth/twitter/callback"
+        consumerKey: process.env.TWITTER_KEY,
+        consumerSecret: process.env.TWITTER_SECRET,
+        callbackURL: process.env.SERVER_URL + "/auth/twitter/callback"
     },
     function(token, tokenSecret, profile, done) {
         //check Customer table for anyone with a twitter ID of profile.id

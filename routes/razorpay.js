@@ -11,8 +11,8 @@ const Razorpay = require('razorpay');
 const Customers = require('../models/customer');
 const Events = require('../models/events');
 const razorpay = new Razorpay({
-    key_id: 'rzp_test_Cly42HaznEIi1i',
-    key_secret: 'mfK26249sjg18WTJwyT0r31N'
+    key_id: process.env.RAZOR_KEY,
+    key_secret: process.env.RAZOR_SECRET
 });
 
 const payRouter = express.Router();
@@ -51,7 +51,7 @@ payRouter
 payRouter
     .route('/payment')
     .post(isAuth, (req, res, next) => {
-        const generated_signature = crypto.createHmac('sha256', 'mfK26249sjg18WTJwyT0r31N') // key secret
+        const generated_signature = crypto.createHmac('sha256', process.env.RAZOR_SECRET) // key secret
         generated_signature.update(req.body.razorpay_order_id + "|" + req.body.transactionid)
         if (generated_signature.digest('hex') === req.body.razorpay_signature) {
             let purchase = {
